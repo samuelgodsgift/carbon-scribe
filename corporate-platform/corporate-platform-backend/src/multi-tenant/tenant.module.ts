@@ -16,6 +16,6 @@ import { TenantContextStore } from './tenant-context.store';
       useClass: TenantGuard,
     },
   ],
-  exports: [TenantService, TenantContextStore, TenantMiddleware],
+  exports: [TenantService, TenantContextStore, TenantMiddleware, TenantGuard],
 })
 export class TenantModule {}
