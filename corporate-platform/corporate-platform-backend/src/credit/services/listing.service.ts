@@ -19,7 +19,7 @@ export class ListingService {
     if (query.methodology) where.methodology = query.methodology;
     if (query.country) where.country = query.country;
     if (query.vintage) where.vintage = query.vintage;
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
     if (query.minPrice || query.maxPrice) {
       where.pricePerTon = {};
       if (query.minPrice) where.pricePerTon.gte = query.minPrice;

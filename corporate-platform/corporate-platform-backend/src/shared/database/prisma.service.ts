@@ -29,6 +29,7 @@ export class PrismaService
     'Bid',
     'RetirementSchedule',
     'BatchRetirement',
+    'Credit',
     'Cart',
     'Order',
     'Portfolio',
@@ -42,7 +43,6 @@ export class PrismaService
   ]);
 
   private readonly scopedModelsByRelation = new Set<string>([
-    'Credit',
     'Auction',
     'Session',
     'ScheduleExecution',
@@ -278,7 +278,7 @@ export class PrismaService
   private getRelationalScope(model: string, companyId: string): any {
     const byModel: Record<string, any> = {
       Credit: { project: { companyId } },
-      Auction: { credit: { project: { companyId } } },
+      Auction: { credit: { companyId } },
       Session: { user: { companyId } },
       ScheduleExecution: { schedule: { companyId } },
       RetirementCertificate: { retirement: { companyId } },
@@ -289,7 +289,7 @@ export class PrismaService
       PortfolioHolding: { portfolio: { companyId } },
       PortfolioSnapshot: { portfolio: { companyId } },
       PortfolioEntry: { portfolio: { companyId } },
-      CreditAvailabilityLog: { credit: { project: { companyId } } },
+      CreditAvailabilityLog: { credit: { companyId } },
     };
 
     return byModel[model];

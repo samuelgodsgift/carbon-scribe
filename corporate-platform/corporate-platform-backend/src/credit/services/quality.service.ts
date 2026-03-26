@@ -11,7 +11,7 @@ export class QualityService {
     companyId?: string,
   ): Promise<CreditQualityBreakdown> {
     const where: any = { id };
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
     const credit = await this.prisma.credit.findFirst({ where });
     if (!credit)
       return {

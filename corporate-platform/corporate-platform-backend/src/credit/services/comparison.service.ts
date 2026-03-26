@@ -11,7 +11,7 @@ export class ComparisonService {
     companyId?: string,
   ): Promise<ComparisonResult> {
     const where: any = { projectId: { in: projectIds } };
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
     const credits = await this.prisma.credit.findMany({
       where,
       include: { project: true },

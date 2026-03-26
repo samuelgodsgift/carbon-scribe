@@ -58,7 +58,8 @@ export class TenantGuard implements CanActivate {
   }
 
   private validateHeaderScope(request: Request, tenant: TenantContext): void {
-    const raw = request.headers['x-tenant-id'];
+    const headers = request.headers ?? {};
+    const raw = headers['x-tenant-id'];
     const companyId =
       typeof raw === 'string' ? raw : Array.isArray(raw) ? raw[0] : undefined;
     if (

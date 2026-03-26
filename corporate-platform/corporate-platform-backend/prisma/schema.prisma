@@ -30,6 +30,9 @@ model Company {
   reports                 Report[]
   activities              Activity[]
   apiKeys                 ApiKey[]
+  credits                 Credit[]
+  ipfsDocuments           IpfsDocument[]
+  transactionConfirmations TransactionConfirmation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,6 +99,8 @@ model Project {
 
 model Credit {
   id           String               @id @default(cuid())
+  companyId    String?
+  company      Company?             @relation(fields: [companyId], references: [id])
   projectId    String
   project      Project             @relation(fields: [projectId], references: [id])
   projectName  String               // Denormalized for display/search
@@ -146,6 +151,8 @@ model Credit {
   lastPurchasedAt DateTime?
 
   @@index([status])
+  @@index([companyId])
+  @@index([companyId, status])
   @@index([country])
   @@index([methodology])
   @@index([vintage])
@@ -773,6 +780,7 @@ model ApiKey {
 model IpfsDocument {
   id              String   @id @default(cuid())
   companyId       String
+  company         Company  @relation(fields: [companyId], references: [id])
   documentType    String   // CERTIFICATE, REPORT, AUDIT_LOG, PROOF
   referenceId     String   // retirementId, reportId, auditId
   ipfsCid         String   @unique
@@ -881,6 +889,7 @@ model TransactionConfirmation {
   id              String   @id @default(cuid())
   transactionHash String   @unique
   companyId       String
+  company         Company  @relation(fields: [companyId], references: [id])
   operationType   String   // TRANSFER, RETIREMENT, MINT
   status          String   // PENDING, CONFIRMED, FAILED
   confirmations   Int      @default(0)
@@ -889,5 +898,6 @@ model TransactionConfirmation {
   metadata        Json?
   createdAt       DateTime @default(now())
 
+  @@index([companyId])
   @@map("transaction_confirmations")
 }

@@ -21,7 +21,7 @@ export class AvailabilityService {
   async listAvailable(page = 1, limit = 20, companyId?: string) {
     const skip = (page - 1) * limit;
     const where: any = { status: 'available' };
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
     const [data, total] = await Promise.all([
       this.prisma.credit.findMany({ where, skip, take: limit }),
       this.prisma.credit.count({ where }),
@@ -36,7 +36,7 @@ export class AvailabilityService {
     companyId?: string,
   ) {
     const where: any = { id };
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
     const credit = await this.prisma.credit.findFirst({ where });
     if (!credit) throw new NotFoundException('Credit not found');
 
@@ -63,7 +63,7 @@ export class AvailabilityService {
 
     return this.prisma.$transaction(async (tx) => {
       const txWhere: any = { id };
-      if (companyId) txWhere.project = { companyId };
+      if (companyId) txWhere.companyId = companyId;
       const updated = await tx.credit.update({ where: txWhere, data });
       // log the status change
       await tx.creditAvailabilityLog.create({
@@ -93,7 +93,7 @@ export class AvailabilityService {
 
     return this.prisma.$transaction(async (tx) => {
       const where: any = { id };
-      if (companyId) where.project = { companyId };
+      if (companyId) where.companyId = companyId;
       const c = await tx.credit.findFirst({ where });
       if (!c) throw new NotFoundException('Credit not found');
       if ((c.availableAmount ?? 0) < amount)
@@ -102,7 +102,7 @@ export class AvailabilityService {
       const newAvailable = (c.availableAmount ?? 0) - amount;
       const newStatus = newAvailable === 0 ? 'reserved' : c.status;
       const txWhere: any = { id };
-      if (companyId) txWhere.project = { companyId };
+      if (companyId) txWhere.companyId = companyId;
       const updated = await tx.credit.update({
         where: txWhere,
         data: { availableAmount: newAvailable, status: newStatus },

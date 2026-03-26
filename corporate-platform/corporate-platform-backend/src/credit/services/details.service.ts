@@ -11,7 +11,7 @@ export class DetailsService {
 
   async getById(id: string, companyId?: string) {
     const where: any = { id };
-    if (companyId) where.project = { companyId };
+    if (companyId) where.companyId = companyId;
 
     const credit = await this.creditRepo.findFirst({
       where,
